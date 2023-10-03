@@ -9,6 +9,8 @@ function Users() {
     <div className="container">
       <h1 className="page-title">Users</h1>
       <div className="card-grid">
+        {isLoading && <p>Loading...</p>}
+        {error && <div>{error}</div>}
         {data &&
           data.map((user) => (
             <UserElement
