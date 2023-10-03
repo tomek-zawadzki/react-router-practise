@@ -1,9 +1,8 @@
-import { useState } from "react";
 import PostELement from "../components/PostELement";
-import useFetch from "../components/useFetch";
+import useFetch from "../hooks/useFetch";
 
 function Posts() {
-  const [url, setUrl] = useState("http://127.0.0.1:3000/posts");
+  const url = "http://127.0.0.1:3000/posts";
   const { data, isLoading, error } = useFetch(url);
 
   return (
