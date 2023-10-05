@@ -19,6 +19,7 @@ function Users() {
               company={user.company.name}
               website={user.website}
               email={user.email}
+              to={`/users/${user.id}`}
             />
           ))}
       </div>

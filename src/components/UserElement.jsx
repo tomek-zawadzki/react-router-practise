@@ -1,4 +1,5 @@
-function UserElement({ name, company, website, email }) {
+import { Link } from "react-router-dom";
+function UserElement({ name, company, website, email, to, id }) {
   return (
     <div className="card">
       <div className="card-header">{name}</div>
@@ -8,9 +9,9 @@ function UserElement({ name, company, website, email }) {
         <div>{email}</div>
       </div>
       <div className="card-footer">
-        <a className="btn" href="user.html">
+        <Link className="btn" to={to}>
           View
-        </a>
+        </Link>
       </div>
     </div>
   );
