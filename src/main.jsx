@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 // import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import NavLayout from "./NavLayout";
+import PageNotFound from "./pages/PageNotFound";
 import Post from "./pages/Post";
 import Posts from "./pages/Posts";
 import Todos from "./pages/Todos";
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
       { path: "/post", element: <Post /> },
       { path: "/users", element: <Users /> },
       { path: "/users/:userId", element: <User /> },
+      { path: "*", element: <PageNotFound /> },
     ],
   },
 ]);
