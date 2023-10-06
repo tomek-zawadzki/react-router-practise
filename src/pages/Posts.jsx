@@ -13,7 +13,12 @@ function Posts() {
         {error && <div>{error}</div>}
         {data &&
           data.map((post) => (
-            <PostELement key={post.id} title={post.title} body={post.body} />
+            <PostELement
+              key={post.id}
+              title={post.title}
+              body={post.body}
+              to={`/posts/${post.id}`}
+            />
           ))}
       </div>
     </div>

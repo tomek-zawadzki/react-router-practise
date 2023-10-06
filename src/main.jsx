@@ -16,12 +16,10 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Post /> },
       { path: "/posts", element: <Posts /> },
+      { path: "/posts/:postId", element: <Post /> },
       { path: "/todos", element: <Todos /> },
-      { path: "/user", element: <User /> },
-      {
-        path: "/users",
-        element: <Users />,
-      },
+      { path: "/post", element: <Post /> },
+      { path: "/users", element: <Users /> },
       { path: "/users/:userId", element: <User /> },
     ],
   },

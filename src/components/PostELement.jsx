@@ -1,4 +1,6 @@
-function PostELement({ title, body }) {
+import { Link } from "react-router-dom";
+
+function PostELement({ title, body, to }) {
   return (
     <div className="card">
       <div className="card-header">{title}</div>
@@ -6,9 +8,9 @@ function PostELement({ title, body }) {
         <div className="card-preview-text">{body}</div>
       </div>
       <div className="card-footer">
-        <a className="btn" href="post.html">
+        <Link className="btn" to={to}>
           View
-        </a>
+        </Link>
       </div>
     </div>
   );
