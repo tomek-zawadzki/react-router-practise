@@ -59,6 +59,7 @@ function User() {
                   key={post.id}
                   title={post.title}
                   body={post.body}
+                  to={`/posts/${post.id}`}
                 />
               ))}
           </div>

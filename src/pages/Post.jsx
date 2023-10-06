@@ -22,13 +22,10 @@ function Post() {
   } = useFetch(urlComments);
 
   if (!usersData) return;
-  // const user = usersData.find((us) => us.id === +userId);
   if (!postsData) return;
   if (!commentsData) return;
 
   const post = postsData.find((post) => post.id === +postId);
-
-  console.log(userId);
 
   return (
     <>
