@@ -1,4 +1,5 @@
 import PostELement from "../components/PostELement";
+import Spinner from "../components/Spinner";
 import useFetch from "../hooks/useFetch";
 
 function Posts() {
@@ -9,7 +10,7 @@ function Posts() {
     <div className="container">
       <h1 className="page-title">Posts</h1>
       <div className="card-grid">
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <Spinner />}
         {error && <div>{error}</div>}
         {data &&
           data.map((post) => (

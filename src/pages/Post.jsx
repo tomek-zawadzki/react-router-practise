@@ -1,4 +1,5 @@
 import { Link, useParams } from "react-router-dom";
+import Spinner from "../components/Spinner";
 import useFetch from "../hooks/useFetch";
 
 function Post() {
@@ -29,7 +30,7 @@ function Post() {
 
   return (
     <>
-      {isLoadingPosts && <p>Is Loading</p>}
+      {isLoadingPosts && <Spinner />}
       {errorPosts && <p>{error}</p>}
       {postsData && (
         <div className="container">

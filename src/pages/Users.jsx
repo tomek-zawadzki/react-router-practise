@@ -1,3 +1,4 @@
+import Spinner from "../components/Spinner";
 import UserElement from "../components/UserElement";
 import useFetch from "../hooks/useFetch";
 
@@ -9,7 +10,7 @@ function Users() {
     <div className="container">
       <h1 className="page-title">Users</h1>
       <div className="card-grid">
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <Spinner />}
         {error && <div>{error}</div>}
         {data &&
           data.map((user) => (

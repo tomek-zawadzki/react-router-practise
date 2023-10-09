@@ -1,3 +1,4 @@
+import Spinner from "../components/Spinner";
 import TodosElement from "../components/TodosElement";
 import useFetch from "../hooks/useFetch";
 
@@ -8,7 +9,7 @@ function Todos() {
     <div className="container">
       <h1 className="page-title">Todos</h1>
       <ul>
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <Spinner />}
         {error && <div>{error}</div>}
         {data &&
           data.map((todo) => (
