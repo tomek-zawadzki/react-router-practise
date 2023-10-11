@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-function UserElement({ name, company, website, email, to, id }) {
+function UserElement({ name, company, website, email, to }) {
   return (
     <div className="card">
       <div className="card-header">{name}</div>

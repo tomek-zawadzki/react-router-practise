@@ -1,57 +1,31 @@
-import { useParams } from "react-router-dom";
+import { useLoaderData, useParams } from "react-router-dom";
 import PostELement from "../components/PostELement";
 import TodosElement from "../components/TodosElement";
-import useFetch from "../hooks/useFetch";
 
 function User() {
   const { userId } = useParams();
 
-  const urlUsers = "http://127.0.0.1:3000/users";
-  const { data: usersData, isLoading, error } = useFetch(urlUsers);
-
-  const urlPosts = "http://127.0.0.1:3000/posts";
-  const {
-    data: postsData,
-    isLoading: isLoadingPosts,
-    error: errorPosts,
-  } = useFetch(urlPosts);
-
-  const urlTodos = "http://127.0.0.1:3000/todos";
-  const {
-    data: todosData,
-    isLoading: isLoadingTodos,
-    error: errorTodos,
-  } = useFetch(urlTodos);
-
-  if (!usersData) return;
-  const user = usersData.find((us) => us.id === +userId);
-
-  if (!postsData) return;
-  if (!todosData) return;
+  const { usersData, postsData, todosData } = useLoaderData();
 
   return (
     <>
-      {isLoading && <p>Is Loading</p>}
-      {error && <p>{error}</p>}
       {usersData && (
         <div className="container">
-          <h1 className="page-title">{user.name}</h1>
-          <div className="page-subtitle">{user.email}</div>
+          <h1 className="page-title">{usersData.name}</h1>
+          <div className="page-subtitle">{usersData.email}</div>
           <div>
-            <b>Company:</b> {user.company.name}
+            <b>Company:</b> {usersData.company.name}
           </div>
           <div>
-            <b>Website:</b> {user.website}
+            <b>Website:</b> {usersData.website}
           </div>
           <div>
-            <b>Address:</b> {user.address.street} {user.address.suite},{" "}
-            {user.address.city}, {user.address.zipcode}
+            <b>Address:</b> {usersData.address.street} {usersData.address.suite}
+            , {usersData.address.city}, {usersData.address.zipcode}
           </div>
 
           <h3 className="mt-4 mb-2">Posts</h3>
           <div className="card-grid">
-            {isLoadingPosts && <p>Is Loading</p>}
-            {errorPosts && <p>{error}</p>}
             {postsData
               .filter((post) => post.userId === +userId)
               .map((post) => (
@@ -66,8 +40,6 @@ function User() {
 
           <h3 className="mt-4 mb-2">Todos</h3>
           <ul>
-            {isLoadingTodos && <p>Is Loading</p>}
-            {errorTodos && <p>{error}</p>}
             {todosData
               .filter((todo) => todo.userId === +userId)
               .map((todo) => (
@@ -84,4 +56,24 @@ function User() {
   );
 }
 
-export default User;
+async function loader({ request: { signal }, params }) {
+  const usersData = fetch(`http://127.0.0.1:3000/users/${params.userId}`, {
+    signal,
+  }).then((res) => res.json());
+  const todosData = fetch(`http://127.0.0.1:3000/todos/`, {
+    signal,
+  }).then((res) => res.json());
+  const postsData = fetch(`http://127.0.0.1:3000/posts/`, {
+    signal,
+  }).then((res) => res.json());
+  return {
+    postsData: await postsData,
+    todosData: await todosData,
+    usersData: await usersData,
+  };
+}
+
+export const userRoute = {
+  loader,
+  element: <User />,
+};

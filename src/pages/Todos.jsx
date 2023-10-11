@@ -1,16 +1,14 @@
-import Spinner from "../components/Spinner";
+import { useLoaderData } from "react-router-dom";
+
 import TodosElement from "../components/TodosElement";
-import useFetch from "../hooks/useFetch";
 
 function Todos() {
-  const url = "http://127.0.0.1:3000/todos";
-  const { data, isLoading, error } = useFetch(url);
+  const data = useLoaderData();
+
   return (
     <div className="container">
       <h1 className="page-title">Todos</h1>
       <ul>
-        {isLoading && <Spinner />}
-        {error && <div>{error}</div>}
         {data &&
           data.map((todo) => (
             <TodosElement
@@ -24,4 +22,13 @@ function Todos() {
   );
 }
 
-export default Todos;
+function loader({ request: { signal } }) {
+  return fetch(`http://127.0.0.1:3000/todos/`, {
+    signal,
+  });
+}
+
+export const todosRoute = {
+  loader,
+  element: <Todos />,
+};

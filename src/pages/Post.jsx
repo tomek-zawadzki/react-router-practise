@@ -1,55 +1,27 @@
-import { Link, useParams } from "react-router-dom";
-import Spinner from "../components/Spinner";
-import useFetch from "../hooks/useFetch";
+import { Link, useLoaderData } from "react-router-dom";
 
 function Post() {
-  const { postId, userId } = useParams();
-
-  const urlUsers = "http://127.0.0.1:3000/users";
-  const { data: usersData, isLoading, error } = useFetch(urlUsers);
-
-  const urlPosts = "http://127.0.0.1:3000/posts";
-  const {
-    data: postsData,
-    isLoading: isLoadingPosts,
-    error: errorPosts,
-  } = useFetch(urlPosts);
-
-  const urlComments = "http://127.0.0.1:3000/comments";
-  const {
-    data: commentsData,
-    isLoading: isLoadingComments,
-    error: errorComments,
-  } = useFetch(urlComments);
-
-  if (!usersData) return;
-  if (!postsData) return;
-  if (!commentsData) return;
-
-  const post = postsData.find((post) => post.id === +postId);
+  const { postsData, commentsData, usersData } = useLoaderData();
+  console.log(postsData);
 
   return (
     <>
-      {isLoadingPosts && <Spinner />}
-      {errorPosts && <p>{error}</p>}
       {postsData && (
         <div className="container">
-          <h1 className="page-title">{post.title}</h1>
+          <h1 className="page-title">{postsData.title}</h1>
           <span className="page-subtitle">
             By:{" "}
-            <Link to={`/users/${post.userId}`}>
+            <Link to={`/users/${postsData.userId.toString()}`}>
               {usersData
-                .filter((user) => user.id === post.userId)
+                .filter((user) => user.id === postsData.userId)
                 .map((us) => us.name)}
             </Link>
           </span>
-          <div>{post.body}</div>
+          <div>{postsData.body}</div>
           <h3 className="mt-4 mb-2">Comments</h3>
           <div className="card-stack">
-            {isLoadingComments && <p>Is loading ...</p>}
-            {errorComments && <p>{error}</p>}
             {commentsData
-              .filter((comment) => comment.postId === +postId)
+              .filter((comment) => comment.postId === postsData.id)
               .map((com) => (
                 <div className="card" key={com.id}>
                   <div className="card-body">
@@ -65,4 +37,26 @@ function Post() {
   );
 }
 
-export default Post;
+async function loader({ request: { signal }, params }) {
+  const usersData = fetch(`http://127.0.0.1:3000/users/`, {
+    signal,
+  }).then((res) => res.json());
+  const commentsData = fetch(`http://127.0.0.1:3000/comments/`, {
+    signal,
+  }).then((res) => res.json());
+  const postsData = await fetch(
+    `http://127.0.0.1:3000/posts/${params.postId}`,
+    {
+      signal,
+    }
+  ).then((res) => res.json());
+  return {
+    postsData,
+    commentsData: await commentsData,
+    usersData: await usersData,
+  };
+}
+export const postRoute = {
+  loader,
+  element: <Post />,
+};

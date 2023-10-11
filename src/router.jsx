@@ -1,25 +1,43 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 import NavLayout from "./NavLayout";
 import ErrorPage from "./pages/ErrorPage";
-import Post from "./pages/Post";
-import Posts from "./pages/Posts";
-import Todos from "./pages/Todos";
-import Users from "./pages/Users";
-import User from "./pages/User";
+import { postRoute } from "./pages/Post";
+import { postsRoute } from "./pages/Posts";
+import { todosRoute } from "./pages/Todos";
+import { usersRoute } from "./pages/Users";
+import { userRoute } from "./pages/User";
 import PageNotFound from "./pages/PageNotFound";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <NavLayout />,
-    errorElement: <ErrorPage />,
     children: [
-      { path: "/posts", element: <Posts /> },
-      { path: "/posts/:postId", element: <Post /> },
-      { path: "/todos", element: <Todos /> },
-      { path: "/users", element: <Users /> },
-      { path: "/users/:userId", element: <User /> },
-      { path: "*", element: <PageNotFound /> },
+      {
+        errorElement: <ErrorPage />,
+        children: [
+          { index: true, element: <Navigate to="/posts" /> },
+          {
+            path: "posts",
+            children: [
+              {
+                index: true,
+                ...postsRoute,
+              },
+              { path: ":postId", ...postRoute },
+            ],
+          },
+          {
+            path: "users",
+            children: [
+              { index: true, ...usersRoute },
+              { path: ":userId", ...userRoute },
+            ],
+          },
+          { path: "todos", ...todosRoute },
+          { path: "*", element: <PageNotFound /> },
+        ],
+      },
     ],
   },
 ]);
