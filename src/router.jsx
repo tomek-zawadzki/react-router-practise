@@ -7,6 +7,7 @@ import { todosRoute } from "./pages/Todos";
 import { usersRoute } from "./pages/Users";
 import { userRoute } from "./pages/User";
 import PageNotFound from "./pages/PageNotFound";
+import NewPostForm from "./pages/NewPostForm";
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
                 ...postsRoute,
               },
               { path: ":postId", ...postRoute },
+              { path: "new", element: <NewPostForm /> },
             ],
           },
           {
