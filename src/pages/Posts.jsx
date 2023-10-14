@@ -1,6 +1,5 @@
 import { Link, useLoaderData } from "react-router-dom";
 import PostELement from "../components/PostELement";
-import NewPostForm from "./NewPostForm";
 
 function Posts() {
   const data = useLoaderData();

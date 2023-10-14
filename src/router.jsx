@@ -3,11 +3,12 @@ import NavLayout from "./NavLayout";
 import ErrorPage from "./pages/ErrorPage";
 import { postRoute } from "./pages/Post";
 import { postsRoute } from "./pages/Posts";
-import { todosRoute } from "./pages/Todos";
+imgiport { todosRoute } from "./pages/Todos";
 import { usersRoute } from "./pages/Users";
 import { userRoute } from "./pages/User";
 import PageNotFound from "./pages/PageNotFound";
 import NewPostForm from "./pages/NewPostForm";
+import EditPostForm from "./pages/EditPostForm";
 
 export const router = createBrowserRouter([
   {
@@ -25,7 +26,46 @@ export const router = createBrowserRouter([
                 index: true,
                 ...postsRoute,
               },
-              { path: ":postId", ...postRoute },
+              {
+                path: ":postId",
+                children: [
+                  { index: true, ...postRoute },
+                  {
+                    path: "edit",
+                    element: <EditPostForm />,
+                    loader: async ({ request: { signal }, params }) => {
+                      const postData = await fetch(
+                        `http://127.0.0.1:3000/posts/${params.postId}`,
+                        {
+                          signal,
+                        }
+                      ).then((res) => res.json());
+
+                      return { postData: await postData };
+                    },
+                    action: async ({ request, params }) => {
+                      const formData = await request.formData();
+                      const title = formData.get("title");
+                      const userId = Number(formData.get("userId"));
+                      const body = formData.get("body");
+
+                      const updatePost = await fetch(
+                        `http://127.0.0.1:3000/posts/${params.postId}`,
+                        {
+                          method: "PUT",
+                          signal: request.signal,
+                          headers: {
+                            "Content-type": "application/json",
+                          },
+                          body: JSON.stringify({ title, userId, body }),
+                        }
+                      ).then((res) => res.json());
+
+                      return redirect(`/posts/${updatePost.id}`);
+                    },
+                  },
+                ],
+              },
               {
                 path: "new",
                 element: <NewPostForm />,
@@ -34,10 +74,6 @@ export const router = createBrowserRouter([
                   const title = formData.get("title");
                   const userId = Number(formData.get("userId"));
                   const body = formData.get("body");
-
-                  console.log(title);
-                  console.log(userId);
-                  console.log(body);
 
                   const post = await fetch(`http://127.0.0.1:3000/posts/`, {
                     method: "POST",
@@ -48,7 +84,7 @@ export const router = createBrowserRouter([
                     body: JSON.stringify({ userId, title, body }),
                   }).then((res) => res.json());
 
-                  return redirect("/");
+                  return redirect(`/posts/${post.id}`);
                 },
               },
             ],

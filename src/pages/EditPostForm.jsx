@@ -1,19 +1,25 @@
-import { Form, Link } from "react-router-dom";
+import { Form, Link, useLoaderData } from "react-router-dom";
 
-function NewPostForm() {
+function EditPostForm() {
+  const { postData } = useLoaderData();
+
   return (
     <div className="container">
-      <h1 className="page-title">New Post</h1>
-      <Form method="post" action="/posts/new" className="form">
+      <h1 className="page-title">Edit Post</h1>
+      <Form method="post" className="form">
         <div className="form-row">
-          <div className="form-group error">
+          <div className="form-group">
             <label htmlFor="title">Title</label>
-            <input type="text" name="title" id="title" />
-            <div className="error-message">Required</div>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              defaultValue={postData.title}
+            />
           </div>
           <div className="form-group">
             <label htmlFor="userId">Author</label>
-            <select name="userId" id="userId">
+            <select name="userId" id="userId" defaultValue={postData.userId}>
               <option value="1">Leanne Graham</option>
               <option value="2">Ervin Howell</option>
               <option value="3">Clementine Bauch</option>
@@ -30,7 +36,11 @@ function NewPostForm() {
         <div className="form-row">
           <div className="form-group">
             <label htmlFor="body">Body</label>
-            <textarea name="body" id="body"></textarea>
+            <textarea
+              name="body"
+              id="body"
+              defaultValue={postData.body}
+            ></textarea>
           </div>
         </div>
         <div className="form-row form-btn-row">
@@ -44,4 +54,4 @@ function NewPostForm() {
   );
 }
 
-export default NewPostForm;
+export default EditPostForm;
